@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="theme-color" content="#f0f4ff"/>
+<title>Öğretmenim</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:#f0f4ff;color:#1a1f36;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;padding-bottom:72px}
+.hdr{background:#fff;padding:14px 16px;position:sticky;top:0;z-index:50;box-shadow:0 1px 0 #e2e8ff;display:flex;align-items:center;justify-content:space-between}
+.hdr-sub{font-size:10px;letter-spacing:2px;color:#94a3b8;text-transform:uppercase}
+.hdr-title{font-size:20px;font-weight:700;color:#1a1f36}
+.btn-add{background:#6366f1;color:#fff;border:none;border-radius:8px;padding:7px 13px;font-size:13px;font-weight:600;cursor:pointer}
+.nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #e2e8ff;display:flex;padding-bottom:env(safe-area-inset-bottom)}
+.ni{flex:1;display:flex;flex-direction:column;align-items:center;padding:8px 0 6px;cursor:pointer;color:#94a3b8;font-size:10px;gap:2px}
+.ni.on{color:#6366f1}
+.ni-icon{font-size:20px}
+.pg{display:none;padding:14px 14px}
+.pg.on{display:block}
+.card{background:#fff;border-radius:14px;padding:14px;margin-bottom:10px;border:1px solid #e2e8ff;box-shadow:0 1px 4px rgba(99,102,241,0.06)}
+.hero{background:linear-gradient(135deg,#4338ca,#6366f1);border-radius:16px;padding:18px;color:#fff;margin-bottom:14px}
+.hero-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:12px}
+.hero-stat{background:rgba(255,255,255,0.15);border-radius:10px;padding:10px;text-align:center}
+.hero-val{font-size:20px;font-weight:700}
+.hero-lbl{font-size:9px;opacity:.8;letter-spacing:1px;margin-top:1px}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;margin-bottom:12px;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{white-space:nowrap;padding:6px 14px;border-radius:20px;border:1.5px solid #e2e8ff;background:#fff;color:#64748b;font-size:12px;cursor:pointer;font-weight:600;flex-shrink:0}
+.tab.on{background:#6366f1;border-color:#6366f1;color:#fff}
+.seg{display:flex;background:#e2e8ff;border-radius:10px;padding:3px;gap:2px;margin-bottom:12px}
+.seg-btn{flex:1;padding:8px;border-radius:8px;border:none;background:transparent;color:#64748b;font-size:13px;font-weight:600;cursor:pointer}
+.seg-btn.on{background:#fff;color:#6366f1;box-shadow:0 1px 4px rgba(0,0,0,.1)}
+label{display:block;font-size:11px;font-weight:600;color:#64748b;margin-bottom:4px;margin-top:12px}
+input,select,textarea{width:100%;background:#f8faff;border:1.5px solid #e2e8ff;border-radius:9px;padding:11px 13px;color:#1a1f36;font-size:14px;font-family:inherit;outline:none}
+input:focus,select:focus,textarea:focus{border-color:#6366f1}
+textarea{min-height:80px;resize:vertical}
+input[type=file]{padding:9px}
+.btn{border:none;border-radius:9px;padding:11px 16px;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer}
+.btn-p{background:#6366f1;color:#fff}
+.btn-g{background:#f1f5f9;color:#64748b;border:1px solid #e2e8ff}
+.btn-d{background:#fff0f0;color:#ef4444;border:1px solid #fecaca}
+.btn-warn{background:#fffbeb;color:#d97706;border:1px solid #fde68a}
+.btn-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.ov{position:fixed;inset:0;background:rgba(15,23,42,.5);z-index:200;display:none;align-items:flex-end}
+.ov.on{display:flex}
+.mod{background:#fff;border-radius:20px 20px 0 0;width:100%;max-height:88vh;overflow-y:auto;padding:20px 16px;padding-bottom:calc(20px + env(safe-area-inset-bottom))}
+.mod-bar{width:32px;height:4px;background:#e2e8ff;border-radius:2px;margin:0 auto 16px}
+.mod-title{font-size:18px;font-weight:700;margin-bottom:14px;color:#1a1f36}
+.tw{overflow-x:auto;border-radius:10px;border:1px solid #e2e8ff;margin-top:8px}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{background:#f8faff;color:#64748b;padding:8px 6px;text-align:left;font-weight:700;font-size:10px;letter-spacing:.5px;border-bottom:1px solid #e2e8ff}
+td{padding:8px 6px;border-bottom:1px solid #f1f5f9;color:#1a1f36}
+tr:last-child td{border-bottom:none}
+.gi{width:46px;background:#f8faff;border:1.5px solid #e2e8ff;border-radius:6px;padding:4px 3px;color:#1a1f36;font-size:12px;text-align:center;font-family:inherit;outline:none}
+.gi:focus{border-color:#6366f1}
+.ga{font-weight:800;font-size:13px}
+.gh{color:#10b981}.gm{color:#f59e0b}.gl{color:#ef4444}
+.empty{text-align:center;padding:36px 16px;color:#94a3b8}
+.ei{font-size:40px;margin-bottom:8px}
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);border-radius:10px;padding:10px 18px;font-size:13px;font-weight:600;z-index:300;white-space:nowrap;display:none}
+.tok{background:#f0fdf4;border:1.5px solid #10b981;color:#059669}
+.ter{background:#fff0f0;border:1.5px solid #ef4444;color:#dc2626}
+.spin-wrap{position:fixed;inset:0;background:rgba(240,244,255,.92);z-index:500;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px}
+.spin{width:36px;height:36px;border:3px solid #e2e8ff;border-top-color:#6366f1;border-radius:50%;animation:sp .7s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.vr{background:#f8faff;border-radius:10px;padding:11px 13px;display:flex;align-items:center;justify-content:space-between;margin-bottom:7px;border:1px solid #e2e8ff}
+.pc{background:#fff;border-radius:12px;padding:12px;margin-bottom:8px;border:1.5px solid #e2e8ff;border-left-width:4px}
+.bdg{display:inline-block;padding:3px 9px;border-radius:20px;font-size:10px;font-weight:700}
+.bg{background:#f0fdf4;color:#059669}.by{background:#fffbeb;color:#d97706}.br{background:#fff0f0;color:#dc2626}
+.sch{display:grid;grid-template-columns:36px repeat(5,1fr);gap:3px;font-size:10px}
+.sh{background:#6366f1;color:#fff;border-radius:5px;padding:5px 2px;text-align:center;font-weight:700;font-size:10px}
+.st{background:#f8faff;border-radius:5px;padding:5px 2px;text-align:center;color:#94a3b8;font-size:9px}
+.sc{background:#f8faff;border:1.5px solid #e2e8ff;border-radius:7px;padding:4px 2px;text-align:center;cursor:pointer;min-height:40px;display:flex;align-items:center;justify-content:center;color:#94a3b8;font-weight:500;font-size:10px}
+.sc.sf{border-color:#818cf8;color:#4338ca;background:#eef2ff}
+.pt{display:flex;gap:6px;margin-bottom:12px}
+.ptb{flex:1;padding:8px;border-radius:9px;border:1.5px solid #e2e8ff;background:#fff;color:#64748b;text-align:center;cursor:pointer;font-size:12px;font-weight:600}
+.ptb.on{background:#6366f1;border-color:#6366f1;color:#fff}
+.fab{position:fixed;bottom:80px;right:14px;width:50px;height:50px;border-radius:50%;background:#6366f1;border:none;font-size:24px;cursor:pointer;color:#fff;box-shadow:0 4px 14px rgba(99,102,241,.4);z-index:90}
+.hint{display:none;background:#f0fdf4;border:1.5px solid #10b981;border-radius:8px;padding:9px 11px;margin-top:7px;font-size:12px;color:#059669;font-weight:600}
+body.locked{padding-bottom:0}
+body.locked .hdr,body.locked .pg,body.locked .nav,body.locked .fab,body.locked .ov{display:none!important}
+.login-wrap{position:fixed;inset:0;z-index:800;background:linear-gradient(135deg,#eef2ff,#f8faff);display:flex;align-items:center;justify-content:center;padding:20px}
+.login-card{width:100%;max-width:390px;background:#fff;border:1px solid #e2e8ff;border-radius:22px;padding:24px;box-shadow:0 16px 40px rgba(99,102,241,.14)}
+.login-logo{width:58px;height:58px;border-radius:18px;background:#6366f1;color:#fff;display:flex;align-items:center;justify-content:center;font-size:30px;margin-bottom:14px}
+.login-title{font-size:24px;font-weight:800;color:#1a1f36;margin-bottom:4px}
+.login-sub{font-size:13px;color:#64748b;line-height:1.45;margin-bottom:18px}
+.login-error{display:none;margin-top:10px;font-size:12px;color:#dc2626;background:#fff0f0;border:1px solid #fecaca;border-radius:9px;padding:9px}
+.hdr-actions{display:flex;gap:8px;align-items:center}
+.btn-logout{background:#fff0f0;color:#ef4444;border:1px solid #fecaca;border-radius:8px;padding:7px 10px;font-size:13px;font-weight:700;cursor:pointer}
+</style>
+</head>
+<body class="locked">
+
+<div id="login" class="login-wrap">
+  <div class="login-card">
+    <div class="login-logo">🧪</div>
+    <div class="login-title">Öğretmenim</div>
+    <div class="login-sub">Mail adresinle kayıt ol veya giriş yap. Giriş yapılmadan veriler yüklenmez ve görünmez.</div>
+    <label>E-posta</label>
+    <input id="loginEmail" type="email" autocomplete="email" placeholder="ornek@mail.com"/>
+    <label>Şifre</label>
+    <input id="loginPass" type="password" autocomplete="current-password" placeholder="Şifre" onkeydown="if(event.key==='Enter')doLogin()"/>
+    <button class="btn btn-p" style="width:100%;margin-top:12px" onclick="doLogin()">Giriş Yap</button>
+    <button class="btn btn-g" style="width:100%;margin-top:8px" onclick="doSignup()">Kayıt Ol</button>
+    <button class="btn btn-g" style="width:100%;margin-top:8px" onclick="doResetPassword()">Şifremi Unuttum / Şifre Değiştir</button>
+    <div id="loginErr" class="login-error"></div>
+  </div>
+</div>
+
+<div id="spin" class="spin-wrap" style="display:none"><div class="spin"></div><div style="color:#6366f1;font-weight:600;font-size:14px">Yükleniyor...</div></div>
+
+<div class="hdr">
+  <div><div class="hdr-sub">Kimya Öğretmeni</div><div class="hdr-title" id="ptitle">Ana Sayfa</div></div>
+  <div class="hdr-actions"><button class="btn-add" onclick="openMod('addClass')">+ Sınıf</button><button class="btn-logout" onclick="doLogout()">Çıkış</button></div>
+</div>
+
+<div class="pg on" id="pg-home">
+  <div class="hero">
+    <div style="font-size:11px;opacity:.7" id="hdate"></div>
+    <div style="font-size:18px;font-weight:700;margin-top:2px">Hoş geldiniz! 👋</div>
+    <div class="hero-grid">
+      <div class="hero-stat"><div class="hero-val" id="hc">0</div><div class="hero-lbl">SINIF</div></div>
+      <div class="hero-stat"><div class="hero-val" id="hs">0</div><div class="hero-lbl">ÖĞRENCİ</div></div>
+      <div class="hero-stat"><div class="hero-val" id="ha">–</div><div class="hero-lbl">ORT.</div></div>
+    </div>
+  </div>
+  <div class="card"><div style="font-weight:700;margin-bottom:10px">📊 Sınıf Başarı</div><div id="hov"><div class="empty"><div class="ei">🏫</div>Henüz sınıf yok</div></div></div>
+  <div class="card"><div style="font-weight:700;margin-bottom:8px">📅 Bugünkü Dersler</div><div id="htod" style="font-size:13px;color:#94a3b8">Ders programı girilmemiş</div></div>
+</div>
+
+<div class="pg" id="pg-grades">
+  <div class="seg"><button class="seg-btn on" onclick="setSem(1,this)">1. Dönem</button><button class="seg-btn" onclick="setSem(2,this)">2. Dönem</button></div>
+  <div class="tabs" id="gtabs"></div>
+  <div id="gcont"><div class="empty"><div class="ei">📝</div>Sınıf seçin</div></div>
+</div>
+
+<div class="pg" id="pg-projects">
+  <div class="tabs" id="ptabs"></div>
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+    <div style="font-weight:700">Proje Takip</div>
+    <button class="btn btn-p" style="padding:6px 12px;font-size:12px" onclick="openMod('addProj')">+ Ekle</button>
+  </div>
+  <div class="pt">
+    <div class="ptb on" onclick="setpf('all',this)">Tümü</div>
+    <div class="ptb" onclick="setpf('pending',this)">⏳</div>
+    <div class="ptb" onclick="setpf('submitted',this)">✅</div>
+    <div class="ptb" onclick="setpf('late',this)">❗</div>
+  </div>
+  <div id="pcont"><div class="empty"><div class="ei">📂</div>Proje yok</div></div>
+</div>
+
+<div class="pg" id="pg-schedule">
+  <div class="card" style="padding:10px 8px">
+    <div style="font-weight:700;margin-bottom:8px;padding:0 4px">📅 Haftalık Program</div>
+    <div class="sch" id="schg"></div>
+    <div style="text-align:center;font-size:10px;color:#94a3b8;margin-top:6px">Hücreye tıkla → düzenle</div>
+  </div>
+</div>
+
+<div class="pg" id="pg-plans">
+  <div class="pt"><div class="ptb on" onclick="setPT('daily',this)">Günlük</div><div class="ptb" onclick="setPT('monthly',this)">Aylık</div><div class="ptb" onclick="setPT('yearly',this)">Yıllık</div></div>
+  <div id="plcont"></div>
+  <button class="fab" onclick="openMod('addPlan')">+</button>
+</div>
+
+<div class="pg" id="pg-veli">
+  <div class="card">
+    <div style="font-weight:700;margin-bottom:10px">👨‍👩‍👧 Veli Görünümü</div>
+    <div class="tabs" id="vtabs"></div>
+    <div id="vcont"><div class="empty"><div class="ei">🔗</div>Sınıf seçin</div></div>
+  </div>
+</div>
+
+<nav class="nav">
+  <div class="ni on" onclick="goPg('home',this)"><div class="ni-icon">🏠</div><div>Ana</div></div>
+  <div class="ni" onclick="goPg('grades',this)"><div class="ni-icon">📊</div><div>Notlar</div></div>
+  <div class="ni" onclick="goPg('projects',this)"><div class="ni-icon">📂</div><div>Projeler</div></div>
+  <div class="ni" onclick="goPg('schedule',this)"><div class="ni-icon">📅</div><div>Program</div></div>
+  <div class="ni" onclick="goPg('plans',this)"><div class="ni-icon">📝</div><div>Planlar</div></div>
+  <div class="ni" onclick="goPg('veli',this)"><div class="ni-icon">👨‍👩‍👧</div><div>Veli</div></div>
+</nav>
+
+<div class="ov" id="ov" onclick="if(event.target===this)closeMod()">
+<div class="mod">
+<div class="mod-bar"></div>
+
+<div id="m-addClass" style="display:none">
+  <div class="mod-title">Yeni Sınıf</div>
+  <label>Sınıf Adı</label><input id="m_cn" placeholder="10-A"/>
+  <label>Öğrenci Listesi</label>
+  <textarea id="m_cs" placeholder="Her satıra bir isim..."></textarea>
+  <label>veya XLS/XLSX/CSV Yükle</label>
+  <input type="file" id="m_cf" accept=".csv,.xlsx,.xls,.txt" onchange="readF(this)"/>
+  <div class="hint" id="m_ch"></div>
+  <div class="btn-row"><button class="btn btn-g" onclick="closeMod()">İptal</button><button class="btn btn-p" onclick="doAddClass()">Ekle</button></div>
+</div>
+
+<div id="m-classSettings" style="display:none">
+  <div class="mod-title">Sınıf Ayarları</div>
+  <input type="hidden" id="m_ecid"/>
+  <label>Sınıf Adı</label><input id="m_ecn"/>
+  <button class="btn btn-p" style="width:100%;margin-top:10px" onclick="doRenameClass()">Güncelle</button>
+  <div style="margin-top:14px;padding-top:14px;border-top:1px solid #e2e8ff">
+    <button class="btn btn-warn" style="width:100%;margin-bottom:8px" onclick="doResetGrades()">🔄 Notları Sıfırla</button>
+    <button class="btn btn-d" style="width:100%" onclick="doDelClass()">🗑️ Sınıfı Sil</button>
+  </div>
+  <button class="btn btn-g" style="width:100%;margin-top:8px" onclick="closeMod()">Kapat</button>
+</div>
+
+<div id="m-stuEdit" style="display:none">
+  <div class="mod-title">Öğrenci Düzenle</div>
+  <input type="hidden" id="m_esid"/>
+  <label>Öğrenci No</label><input id="m_esnum" placeholder="653"/>
+  <label>Ad Soyad</label><input id="m_esn"/>
+  <div class="btn-row"><button class="btn btn-g" onclick="closeMod()">İptal</button><button class="btn btn-p" onclick="doRenameStu()">Güncelle</button></div>
+  <button class="btn btn-d" style="width:100%;margin-top:8px" onclick="doDelStu()">🗑️ Sil</button>
+</div>
+
+<div id="m-addProj" style="display:none">
+  <div class="mod-title">Proje Ekle</div>
+  <label>Sınıf</label>
+  <select id="m_pc" onchange="fillPS(this.value)"><option value="">Seç...</option></select>
+  <label>Öğrenci</label>
+  <select id="m_ps"><option value="">Önce sınıf seçin</option></select>
+  <label>Konu</label><input id="m_pt" placeholder="Periyodik Tablo"/>
+  <label>Teslim Tarihi</label><input type="date" id="m_pd"/>
+  <label>Not</label><textarea id="m_pn" placeholder="..."></textarea>
+  <div class="btn-row"><button class="btn btn-g" onclick="closeMod()">İptal</button><button class="btn btn-p" onclick="doAddProj()">Ekle</button></div>
+</div>
+
+<div id="m-addPlan" style="display:none">
+  <div class="mod-title" id="m_plt">Plan Ekle</div>
+  <label>Başlık</label><input id="m_pln"/>
+  <label>Tarih</label><input type="date" id="m_pldate"/>
+  <label>İçerik</label><textarea id="m_plbody"></textarea>
+  <div class="btn-row"><button class="btn btn-g" onclick="closeMod()">İptal</button><button class="btn btn-p" onclick="doAddPlan()">Kaydet</button></div>
+</div>
+
+<div id="m-schCell" style="display:none">
+  <div class="mod-title">Ders Bilgisi</div>
+  <input id="m_sc" placeholder="10-A Kimya"/>
+  <div class="btn-row"><button class="btn btn-g" onclick="closeMod()">İptal</button><button class="btn btn-p" onclick="doSaveCell()">Kaydet</button></div>
+</div>
+
+<div id="m-veli" style="display:none">
+  <div class="mod-title" id="m_vn"></div>
+  <div id="m_vb"></div>
+  <button class="btn btn-g" style="width:100%;margin-top:12px" onclick="closeMod()">Kapat</button>
+</div>
+
+</div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+var SB='https://yqyrhuednyhirgcghexe.supabase.co';
+var SK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlxeXJodWVkbnloaXJnY2doZXhlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk3NzQ5MTgsImV4cCI6MjA5NTM1MDkxOH0.bPaF2xWNL4k4eZhhQpzYpaCojqSVIYe4sqM-atpoDJM';
+var sbClient=window.supabase.createClient(SB,SK);
+var H={'Content-Type':'application/json','apikey':SK,'Authorization':'Bearer '+SK,'Prefer':'return=representation'};
+var currentUser=null;
+var appStarted=false;
+sbClient.auth.onAuthStateChange(async function(event,session){
+  if(event==='PASSWORD_RECOVERY'){
+    var np=prompt('Yeni şifrenizi girin. En az 6 karakter olmalı.');
+    if(np&&np.length>=6){
+      var res=await sbClient.auth.updateUser({password:np});
+      if(res.error){alert('Şifre değiştirilemedi: '+res.error.message);}
+      else{alert('Şifre değiştirildi. Yeni şifrenizle giriş yapabilirsiniz.');}
+    }
+  }
+});
+
+function setLoginMessage(msg,isErr){
+  var el=document.getElementById('loginErr');
+  if(!el)return;
+  el.textContent=msg||'';
+  el.style.display=msg?'block':'none';
+  el.style.color=isErr?'#dc2626':'#059669';
+  el.style.background=isErr?'#fff0f0':'#f0fdf4';
+  el.style.borderColor=isErr?'#fecaca':'#bbf7d0';
+}
+function authHeaders(){
+  var token=currentUser&&currentUser.access_token?currentUser.access_token:SK;
+  return {'Content-Type':'application/json','apikey':SK,'Authorization':'Bearer '+token,'Prefer':'return=representation'};
+}
+function withUser(row){
+  if(!currentUser||!currentUser.user)return row;
+  if(Array.isArray(row))return row.map(withUser);
+  return Object.assign({},row,{user_id:currentUser.user.id});
+}
+async function unlockApp(session){
+  currentUser=session;
+  H=authHeaders();
+  document.body.classList.remove('locked');
+  var l=document.getElementById('login');if(l)l.style.display='none';
+  if(!appStarted){appStarted=true;init();}
+}
+async function doLogin(){
+  var email=(document.getElementById('loginEmail').value||'').trim();
+  var pass=(document.getElementById('loginPass').value||'').trim();
+  if(!email||!pass){setLoginMessage('E-posta ve şifre girin.',true);return;}
+  setLoginMessage('Giriş yapılıyor...',false);
+  var res=await sbClient.auth.signInWithPassword({email:email,password:pass});
+  if(res.error){setLoginMessage(res.error.message,true);return;}
+  await unlockApp(res.data.session);
+}
+async function doSignup(){
+  var email=(document.getElementById('loginEmail').value||'').trim();
+  var pass=(document.getElementById('loginPass').value||'').trim();
+  if(!email||!pass){setLoginMessage('Kayıt için e-posta ve şifre girin.',true);return;}
+  if(pass.length<6){setLoginMessage('Şifre en az 6 karakter olmalı.',true);return;}
+  setLoginMessage('Kayıt oluşturuluyor...',false);
+  var res=await sbClient.auth.signUp({email:email,password:pass});
+  if(res.error){setLoginMessage(res.error.message,true);return;}
+  if(res.data.session){await unlockApp(res.data.session);}else{setLoginMessage('Kayıt oluşturuldu. E-posta onayı istenirse gelen kutunu kontrol edin.',false);}
+}
+async function doResetPassword(){
+  var email=(document.getElementById('loginEmail').value||'').trim();
+  if(!email){setLoginMessage('Şifre sıfırlama için e-posta adresini yazın.',true);return;}
+  var res=await sbClient.auth.resetPasswordForEmail(email,{redirectTo:location.origin+location.pathname});
+  if(res.error){setLoginMessage(res.error.message,true);return;}
+  setLoginMessage('Şifre değiştirme bağlantısı e-posta adresine gönderildi.',false);
+}
+async function doLogout(){
+  try{await sbClient.auth.signOut();}catch(e){}
+  currentUser=null;
+  cls=[];stu=[];grd=[];prj=[];sch=[];pln=[];
+  sessionStorage.clear();
+  if('caches' in window){caches.keys().then(function(keys){keys.forEach(function(k){caches.delete(k);});}).finally(function(){location.replace(location.pathname);});}
+  else{location.replace(location.pathname);}
+}
+async function ensureLogin(){
+  document.getElementById('spin').style.display='none';
+  var res=await sbClient.auth.getSession();
+  if(res.data&&res.data.session){await unlockApp(res.data.session);return true;}
+  var i=document.getElementById('loginEmail');if(i)setTimeout(function(){i.focus();},150);
+  return false;
+}
+
+function req(method,table,q,body){
+  var url=SB+'/rest/v1/'+table+(q?'?'+q:'');
+  var opt={method:method,headers:H};
+  if(body)opt.body=JSON.stringify(body);
+  return fetch(url,opt).then(function(r){
+    if(!r.ok)return r.text().then(function(t){throw new Error(t);});
+    if(method==='DELETE')return [];
+    return r.json();
+  });
+}
+function ups(table,body,conflict){
+  return fetch(SB+'/rest/v1/'+table+'?on_conflict='+conflict,{
+    method:'POST',
+    headers:Object.assign({},H,{'Prefer':'resolution=merge-duplicates,return=representation'}),
+    body:JSON.stringify(body)
+  }).then(function(r){if(!r.ok)return r.text().then(function(t){throw new Error(t);});return r.json();});
+}
+
+var cls=[],stu=[],grd=[],prj=[],sch=[],pln=[];
+var curSem=1,curCls=null,curPCls=null,curPF='all',curPT='daily';
+var edi,edj;
+var impData=null;
+
+var MO=['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
+var DO=['Pazar','Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi'];
+var DAYS=['Pzt','Sal','Çar','Per','Cum'];
+
+function toast(msg,err){
+  var el=document.getElementById('toast');
+  el.textContent=msg;
+  el.className='toast '+(err?'ter':'tok');
+  el.style.display='block';
+  clearTimeout(el._t);
+  el._t=setTimeout(function(){el.style.display='none';},2600);
+}
+
+function goPg(name,el){
+  document.querySelectorAll('.pg').forEach(function(p){p.classList.remove('on');});
+  document.querySelectorAll('.ni').forEach(function(n){n.classList.remove('on');});
+  document.getElementById('pg-'+name).classList.add('on');
+  if(el)el.classList.add('on');
+  var t={home:'Ana Sayfa',grades:'Not Defteri',projects:'Proje Takip',schedule:'Ders Programı',plans:'Planlarım',veli:'Veli Görünümü'};
+  document.getElementById('ptitle').textContent=t[name]||name;
+  if(name==='grades')rGrades();
+  if(name==='projects')rProj();
+  if(name==='schedule')rSch();
+  if(name==='plans')rPlans();
+  if(name==='veli')rVeli();
+  if(name==='home')rHome();
+}
+
+function openMod(name){
+  document.getElementById('ov').classList.add('on');
+  document.querySelectorAll('.mod>[id^="m-"]').forEach(function(m){m.style.display='none';});
+  document.getElementById('m-'+name).style.display='block';
+  if(name==='addProj'){
+    var sel=document.getElementById('m_pc');
+    sel.innerHTML='<option value="">Seç...</option>'+cls.map(function(c){return '<option value="'+c.id+'">'+c.name+'</option>';}).join('');
+    document.getElementById('m_ps').innerHTML='<option value="">Önce sınıf seçin</option>';
+    document.getElementById('m_pt').value='';
+    document.getElementById('m_pn').value='';
+    document.getElementById('m_pd').value='';
+  }
+}
+function closeMod(){document.getElementById('ov').classList.remove('on');}
+
+// HELPERS
+function getStu(cid){return stu.filter(function(s){return s.class_id===cid;});}
+function getGrd(sid,sem){return grd.find(function(g){return g.student_id===sid&&g.semester===sem;})||{};}
+function calcAvg(g){
+  var v=[g.w1,g.w2,g.perf,g.project,g.oral].map(parseFloat).filter(function(x){return !isNaN(x);});
+  return v.length?(v.reduce(function(a,b){return a+b;},0)/v.length).toFixed(1):'-';
+}
+function calcAvgN(g){
+  var v=[g.w1,g.w2,g.perf,g.project,g.oral].map(parseFloat).filter(function(x){return !isNaN(x);});
+  return v.length?v.reduce(function(a,b){return a+b;},0)/v.length:null;
+}
+function gc(v){return(!v||v==='-')?'':parseFloat(v)>=85?'gh':parseFloat(v)>=60?'gm':'gl';}
+function suggest(g,field){
+  if(field!=='perf'&&field!=='project')return null;
+  if(g[field])return null;
+  var y1=parseFloat(g.w1)||0,y2=parseFloat(g.w2)||0;
+  if(!y1&&!y2)return null;
+  var needed=200-y1-y2;
+  if(needed<=0)return null;
+  if((y1+y2)/2>=50)return null;
+  if(field==='perf'&&g.project){var r=needed-(parseFloat(g.project)||0);return r>0?Math.min(100,Math.ceil(r)):null;}
+  if(field==='project'&&g.perf){var r=needed-(parseFloat(g.perf)||0);return r>0?Math.min(100,Math.ceil(r)):null;}
+  return Math.min(100,Math.ceil(needed/2));
+}
+
+// INIT
+function init(){
+  document.getElementById('spin').style.display='flex';
+  var n=new Date();
+  document.getElementById('hdate').textContent=DO[n.getDay()]+', '+n.getDate()+' '+MO[n.getMonth()]+' '+n.getFullYear();
+
+  Promise.all([
+    req('GET','teacher_classes','order=created_at.asc'),
+    req('GET','teacher_students','order=created_at.asc'),
+    req('GET','teacher_grades'),
+    req('GET','teacher_projects','order=created_at.desc'),
+    req('GET','teacher_schedule'),
+    req('GET','teacher_plans','order=created_at.desc')
+  ]).then(function(res){
+    cls=res[0];stu=res[1];grd=res[2];prj=res[3];sch=res[4];pln=res[5];
+    document.getElementById('spin').style.display='none';
+    rHome();rSch();
+  }).catch(function(e){
+    document.getElementById('spin').style.display='none';
+    toast('Bağlantı hatası: '+e.message,1);
+    rHome();rSch();
+  });
+}
+
+// HOME
+function rHome(){
+  document.getElementById('hc').textContent=cls.length;
+  document.getElementById('hs').textContent=stu.length;
+  if(!cls.length){
+    document.getElementById('hov').innerHTML='<div class="empty"><div class="ei">🏫</div>Henüz sınıf yok</div>';
+    document.getElementById('ha').textContent='–';
+    return;
+  }
+  var allA=[];
+  var html=cls.map(function(c){
+    var ss=getStu(c.id);
+    var avgs=ss.map(function(s){return calcAvgN(getGrd(s.id,1));}).filter(function(x){return x!==null;});
+    var ca=avgs.length?avgs.reduce(function(a,b){return a+b;},0)/avgs.length:null;
+    if(ca!==null)allA.push(ca);
+    var pct=ca?Math.round(ca):'?';
+    var col=ca===null?'#94a3b8':ca>=85?'#10b981':ca>=60?'#f59e0b':'#ef4444';
+    return '<div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid #f1f5f9">'+
+      '<div><div style="font-weight:700;font-size:14px">'+c.name+'</div><div style="font-size:11px;color:#94a3b8">'+ss.length+' öğrenci</div></div>'+
+      '<div style="text-align:right"><div style="font-size:18px;font-weight:800;color:'+col+'">'+pct+'</div>'+
+      '<div style="background:#f1f5f9;border-radius:3px;height:5px;width:60px;margin-top:3px"><div style="height:100%;border-radius:3px;background:'+col+';width:'+(pct==='?'?0:pct)+'%"></div></div></div></div>';
+  }).join('');
+  document.getElementById('hov').innerHTML=html;
+  if(allA.length)document.getElementById('ha').textContent=(allA.reduce(function(a,b){return a+b;},0)/allA.length).toFixed(1);
+
+  var today=new Date().getDay();
+  var dm={1:0,2:1,3:2,4:3,5:4};
+  var di=dm[today];
+  if(di!==undefined){
+    var cells=sch.filter(function(s){return s.day_index===di&&s.content;}).sort(function(a,b){return a.period_index-b.period_index;});
+    document.getElementById('htod').innerHTML=cells.length?
+      cells.map(function(s){return '<div style="padding:5px 0;border-bottom:1px solid #f1f5f9;font-size:12px"><span style="color:#94a3b8;font-weight:600;margin-right:6px">'+(s.period_index+1)+'.ders</span>'+s.content+'</div>';}).join(''):
+      '<div style="color:#94a3b8;font-size:12px">Bugün ders yok</div>';
+  }
+}
+
+// GRADES
+function setSem(n,btn){curSem=n;document.querySelectorAll('.seg-btn').forEach(function(b){b.classList.remove('on');});btn.classList.add('on');rGradeTable();}
+
+function rGrades(){
+  var el=document.getElementById('gtabs');
+  el.innerHTML=cls.map(function(c){
+    return '<div class="tab'+(curCls===c.id?' on':'')+'" data-id="'+c.id+'" onclick="selCls(this.dataset.id)">'+c.name+'</div>';
+  }).join('')+'<div class="tab" style="border-style:dashed" onclick="openMod(\'addClass\')">+ Sınıf</div>';
+  if(!curCls&&cls.length)curCls=cls[0].id;
+  if(!curCls){document.getElementById('gcont').innerHTML='<div class="empty"><div class="ei">📝</div>Sınıf ekleyin</div>';return;}
+  rGradeTable();
+}
+function selCls(id){curCls=id;rGrades();}
+
+function rGradeTable(){
+  var c=cls.find(function(x){return x.id===curCls;});if(!c)return;
+  var ss=getStu(c.id);
+  var html='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">';
+  html+='<div style="font-size:12px;color:#64748b;font-weight:600">'+ss.length+' öğrenci · '+curSem+'. Dönem</div>';
+  html+='<div style="display:flex;gap:5px">';
+  html+='<button class="btn btn-g" style="padding:5px 9px;font-size:11px" data-id="'+c.id+'" onclick="doExport(this.dataset.id)">📥</button>';
+  html+='<button class="btn btn-g" style="padding:5px 9px;font-size:11px;color:#6366f1" data-id="'+c.id+'" onclick="openCS(this.dataset.id)">⚙️</button>';
+  html+='</div></div>';
+  html+='<div class="tw"><table><thead><tr><th style="min-width:90px">No</th><th style="min-width:90px">Öğrenci</th><th>Y.1</th><th>Y.2</th><th>P.1</th><th>P.2</th><th>Prj.</th><th>Ort.</th><th></th></tr></thead><tbody>';
+  ss.forEach(function(s){
+    var g=getGrd(s.id,curSem);
+    var a=calcAvg(g);
+    var gid=g.id||'';
+    html+='<tr>';
+    html+='<td style="font-size:11px;color:#94a3b8;font-weight:600;text-align:center">'+(s.student_number||'')+'</td>';
+    html+='<td style="font-weight:600;white-space:nowrap;font-size:11px">'+s.name+'</td>';
+    ['w1','w2'].forEach(function(f){
+      html+='<td><input class="gi" type="number" min="0" max="100" value="'+(g[f]||'')+'" data-sid="'+s.id+'" data-gid="'+gid+'" data-sem="'+curSem+'" data-f="'+f+'" onchange="onGrd(this)"/></td>';
+    });
+    ['perf','project'].forEach(function(f){
+      var sg=suggest(g,f);
+      var ph=sg!==null?String(sg):'';
+      var st2=sg!==null&&!g[f]?'color:#a5b4fc':'';
+      html+='<td><input class="gi" type="number" min="0" max="100" value="'+(g[f]||'')+'" placeholder="'+ph+'" style="'+st2+'" data-sid="'+s.id+'" data-gid="'+gid+'" data-sem="'+curSem+'" data-f="'+f+'" onchange="onGrd(this)"/></td>';
+    });
+    html+='<td><input class="gi" type="number" min="0" max="100" value="'+(g.oral||'')+'" data-sid="'+s.id+'" data-gid="'+gid+'" data-sem="'+curSem+'" data-f="oral" onchange="onGrd(this)"/></td>';
+    html+='<td><span class="ga '+gc(a)+'">'+a+'</span></td>';
+    html+='<td><span data-sid="'+s.id+'" onclick="openSE(this.dataset.sid)" style="cursor:pointer;font-size:14px">✏️</span></td>';
+    html+='</tr>';
+  });
+  html+='</tbody></table></div>';
+  var avgs=ss.map(function(s){return calcAvgN(getGrd(s.id,curSem));}).filter(function(x){return x!==null;});
+  if(avgs.length){
+    var ca=(avgs.reduce(function(a,b){return a+b;},0)/avgs.length).toFixed(1);
+    var bc=ca>=85?'#10b981':ca>=60?'#f59e0b':'#ef4444';
+    var bg=ca>=85?'#f0fdf4':ca>=60?'#fffbeb':'#fff0f0';
+    html+='<div style="margin-top:10px;background:'+bg+';border-radius:10px;padding:11px 14px;display:flex;justify-content:space-between;align-items:center;border:1.5px solid '+bc+'">';
+    html+='<span style="font-weight:700;color:#64748b;font-size:13px">Sınıf Ortalaması</span>';
+    html+='<span style="font-size:22px;font-weight:800;color:'+bc+'">'+ca+'</span></div>';
+  }
+  document.getElementById('gcont').innerHTML=html;
+}
+
+var gTmr={};
+function onGrd(inp){
+  var sid=inp.dataset.sid,gid=inp.dataset.gid,sem=parseInt(inp.dataset.sem),f=inp.dataset.f,val=inp.value;
+  var g=grd.find(function(x){return x.id===gid;});
+  if(!g){g={id:gid,student_id:sid,semester:sem};if(gid)grd.push(g);}
+  g[f]=val?parseFloat(val):null;
+  var row=inp.closest('tr');
+  if(row){
+    var el=row.querySelector('.ga');
+    if(el){var a=calcAvg(g);el.textContent=a;el.className='ga '+gc(a);}
+    row.querySelectorAll('input[data-f]').forEach(function(i2){
+      if(i2!==inp&&(i2.dataset.f==='perf'||i2.dataset.f==='project')&&!i2.value){
+        var sg=suggest(g,i2.dataset.f);
+        i2.placeholder=sg!==null?String(sg):'';
+        i2.style.color=sg!==null?'#a5b4fc':'';
+      }
+    });
+  }
+  clearTimeout(gTmr[sid+f]);
+  gTmr[sid+f]=setTimeout(function(){
+    if(gid){
+      req('PATCH','teacher_grades','id=eq.'+gid,{[f]:val?parseFloat(val):null}).then(function(){rHome();}).catch(function(e){toast(e.message,1);});
+    }else{
+      req('POST','teacher_grades',null,withUser({student_id:sid,semester:sem,[f]:val?parseFloat(val):null})).then(function(r){
+        if(r&&r[0]){g.id=r[0].id;inp.dataset.gid=r[0].id;var row2=inp.closest('tr');if(row2)row2.querySelectorAll('input[data-gid]').forEach(function(i3){i3.dataset.gid=r[0].id;});}
+        rHome();
+      }).catch(function(e){toast(e.message,1);});
+    }
+  },800);
+}
+
+function openCS(id){
+  var c=cls.find(function(x){return x.id===id;});if(!c)return;
+  document.getElementById('m_ecid').value=id;
+  document.getElementById('m_ecn').value=c.name;
+  openMod('classSettings');
+}
+function doRenameClass(){
+  var id=document.getElementById('m_ecid').value;
+  var name=document.getElementById('m_ecn').value.trim();
+  if(!name)return;
+  req('PATCH','teacher_classes','id=eq.'+id,{name:name}).then(function(){
+    var c=cls.find(function(x){return x.id===id;});if(c)c.name=name;
+    closeMod();rGrades();rHome();toast('Güncellendi ✓');
+  }).catch(function(e){toast(e.message,1);});
+}
+function doResetGrades(){
+  var id=document.getElementById('m_ecid').value;
+  var c=cls.find(function(x){return x.id===id;});
+  if(!confirm(c.name+' notları sıfırlansın mı?'))return;
+  var ss=getStu(id);
+  if(!ss.length){closeMod();return;}
+  req('PATCH','teacher_grades','student_id=in.('+ss.map(function(s){return s.id;}).join(',')+')',{w1:null,w2:null,oral:null,project:null,perf:null}).then(function(){
+    return req('GET','teacher_grades');
+  }).then(function(r){grd=r;closeMod();rGradeTable();toast('Sıfırlandı ✓');}).catch(function(e){toast(e.message,1);});
+}
+function doDelClass(){
+  var id=document.getElementById('m_ecid').value;
+  var c=cls.find(function(x){return x.id===id;});
+  if(!confirm(c.name+' silinsin mi?'))return;
+  req('DELETE','teacher_classes','id=eq.'+id).then(function(){
+    cls=cls.filter(function(x){return x.id!==id;});
+    stu=stu.filter(function(x){return x.class_id!==id;});
+    if(curCls===id)curCls=cls.length?cls[0].id:null;
+    closeMod();rGrades();rHome();toast('Silindi',1);
+  }).catch(function(e){toast(e.message,1);});
+}
+
+function openSE(id){
+  var s=stu.find(function(x){return x.id===id;});if(!s)return;
+  document.getElementById('m_esid').value=id;
+  document.getElementById('m_esnum').value=s.student_number||'';
+  document.getElementById('m_esn').value=s.name;
+  openMod('stuEdit');
+}
+function doRenameStu(){
+  var id=document.getElementById('m_esid').value;
+  var name=document.getElementById('m_esn').value.trim();
+  var num=document.getElementById('m_esnum').value.trim();
+  if(!name)return;
+  req('PATCH','teacher_students','id=eq.'+id,{name:name,student_number:num||null}).then(function(){
+    var s=stu.find(function(x){return x.id===id;});if(s)s.student_number=num||null;
+    var s=stu.find(function(x){return x.id===id;});if(s)s.name=name;
+    closeMod();rGradeTable();toast('Güncellendi ✓');
+  }).catch(function(e){toast(e.message,1);});
+}
+function doDelStu(){
+  var id=document.getElementById('m_esid').value;
+  var s=stu.find(function(x){return x.id===id;});
+  if(!confirm(s.name+' silinsin mi?'))return;
+  req('DELETE','teacher_students','id=eq.'+id).then(function(){
+    stu=stu.filter(function(x){return x.id!==id;});
+    grd=grd.filter(function(g){return g.student_id!==id;});
+    closeMod();rGradeTable();rHome();toast('Silindi',1);
+  }).catch(function(e){toast(e.message,1);});
+}
+
+function doExport(cid){
+  if(typeof XLSX==='undefined')return;
+  var c=cls.find(function(x){return x.id===cid;});
+  var ss=getStu(cid);
+  var rows=[['Öğrenci','Yazılı 1','Yazılı 2','Performans 1','Performans 2','Proje','Ortalama']];
+  ss.forEach(function(s){var g=getGrd(s.id,curSem);rows.push([s.name,g.w1||'',g.w2||'',g.perf||'',g.project||'',g.oral||'',calcAvg(g)]);});
+  var wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(rows),c.name);
+  XLSX.writeFile(wb,c.name+'_notlar.xlsx');toast('Excel indirildi ✓');
+}
+
+// ADD CLASS
+function readF(input){
+  var file=input.files[0];if(!file)return;
+  var fn=file.name.toLowerCase();
+  if(fn.endsWith('.csv')||fn.endsWith('.txt')){
+    var r=new FileReader();r.onload=function(e){parseC(e.target.result);};r.readAsText(file,'utf-8');return;
+  }
+  if(fn.endsWith('.xlsx')||fn.endsWith('.xls')){
+    if(typeof XLSX==='undefined'){toast('3 sn bekleyip tekrar deneyin',1);return;}
+    var r=new FileReader();r.onload=function(e){
+      try{var wb=XLSX.read(e.target.result,{type:'array',codepage:1254});var csv=XLSX.utils.sheet_to_csv(wb.Sheets[wb.SheetNames[0]],{FS:',',blankrows:false});parseC(csv);}
+      catch(err){toast('Okunamadı: '+err.message,1);}
+    };r.readAsArrayBuffer(file);
+  }
+}
+function parseC(text){
+  var fl=text.split('\n')[0]||'';
+  var sep=fl.split(';').length>fl.split(',').length?';':',';
+  var lines=text.split('\n').map(function(l){return l.split(sep).map(function(c){return c.replace(/"/g,'').trim();});});
+  var y1=-1,y2=-1,pj=-1;
+  for(var i=0;i<Math.min(lines.length,10);i++){
+    var row=lines[i];if(row.indexOf('Y1')>-1){y1=row.indexOf('Y1');y2=row.indexOf('Y2');for(var k=0;k<row.length;k++){if(row[k]==='Proje'){pj=k;break;}}break;}
+  }
+  var names=[],data=[];
+  for(var i=0;i<lines.length;i++){
+    var row=lines[i];var s=parseInt(row[0]);
+    if(isNaN(s)||s<=0||String(s)!==row[0])continue;
+    var name=(row[2]||'').trim();if(!name||name.length<3||!isNaN(name))continue;
+    var snum=(row[1]||'').trim();
+    names.push(name);
+    var entry={name:name,student_number:snum||null};
+    if(y1>-1){var v=parseFloat((row[y1]||'').replace(',','.'));if(!isNaN(v)&&v>0)entry.w1=v;}
+    if(y2>-1){var v=parseFloat((row[y2]||'').replace(',','.'));if(!isNaN(v)&&v>0)entry.w2=v;}
+    data.push(entry);
+  }
+  document.getElementById('m_cs').value=names.join('\n');
+  var hint=document.getElementById('m_ch');
+  var hasG=data.some(function(d){return d.w1||d.w2;});
+  if(hasG){impData=data;hint.style.display='block';hint.textContent='e-Okul: '+names.length+' öğrenci + notlar hazır!';}
+  else{impData=null;hint.style.display='none';}
+  toast(names.length+' öğrenci bulundu');
+}
+function doAddClass(){
+  var name=document.getElementById('m_cn').value.trim();
+  if(!name)return toast('Sınıf adı girin',1);
+  var raw=document.getElementById('m_cs').value;
+  req('POST','teacher_classes',null,withUser({name:name})).then(function(r){
+    var c=r[0];cls.push(c);
+    var names=raw.split('\n').map(function(l){return l.trim();}).filter(Boolean);
+    if(!names.length){document.getElementById('m_cn').value='';closeMod();toast(name+' eklendi');rHome();return;}
+    return req('POST','teacher_students',null,withUser(names.map(function(n,i){var d=impData&&impData[i]?impData[i]:{};return {class_id:c.id,name:n,student_number:d.student_number||null};}))).then(function(ns){
+      stu=stu.concat(ns);
+      var rows=ns.flatMap(function(s,i){
+        var d=impData&&impData[i]?impData[i]:{};
+        return [{student_id:s.id,semester:1,w1:d.w1||null,w2:d.w2||null,oral:null,project:null,perf:null},
+                {student_id:s.id,semester:2,w1:null,w2:null,oral:null,project:null,perf:null}];
+      });
+      return req('POST','teacher_grades',null,withUser(rows)).then(function(ng){
+        grd=grd.concat(ng);impData=null;
+        document.getElementById('m_cn').value='';document.getElementById('m_cs').value='';
+        document.getElementById('m_ch').style.display='none';
+        closeMod();toast(name+' eklendi');rHome();
+      });
+    });
+  }).catch(function(e){toast(e.message,1);});
+}
+
+// SCHEDULE
+function rSch(){
+  var g=document.getElementById('schg');
+  var h='<div class="sh"></div>'+DAYS.map(function(d){return '<div class="sh">'+d+'</div>';}).join('');
+  for(var p=0;p<8;p++){
+    h+='<div class="st">'+(p+1)+'.<br><span style="font-size:8px">'+(8+p)+':00</span></div>';
+    for(var d=0;d<5;d++){
+      var cell=sch.find(function(s){return s.day_index===d&&s.period_index===p;});
+      var cont=cell?cell.content:'';
+      h+='<div class="sc'+(cont?' sf':'')+'" data-d="'+d+'" data-p="'+p+'" onclick="editCell(parseInt(this.dataset.d),parseInt(this.dataset.p))">'+(cont||'+')+'</div>';
+    }
+  }
+  g.innerHTML=h;
+}
+function editCell(d,p){edi=d;edj=p;var c=sch.find(function(s){return s.day_index===d&&s.period_index===p;});document.getElementById('m_sc').value=c?c.content:'';openMod('schCell');}
+function doSaveCell(){
+  var cont=document.getElementById('m_sc').value.trim();
+  ups('teacher_schedule',withUser({day_index:edi,period_index:edj,content:cont}),'user_id,day_index,period_index').then(function(){
+    var idx=sch.findIndex(function(s){return s.day_index===edi&&s.period_index===edj;});
+    if(idx>-1)sch[idx].content=cont;else sch.push({day_index:edi,period_index:edj,content:cont});
+    closeMod();rSch();rHome();toast('Kaydedildi ✓');
+  }).catch(function(e){toast(e.message,1);});
+}
+
+// PLANS
+function setPT(tab,btn){curPT=tab;document.querySelectorAll('#pg-plans .ptb').forEach(function(t){t.classList.remove('on');});btn.classList.add('on');rPlans();}
+function rPlans(){
+  var list=pln.filter(function(p){return p.plan_type===curPT;});
+  var cols={daily:'#6366f1',monthly:'#10b981',yearly:'#f59e0b'};
+  if(!list.length){document.getElementById('plcont').innerHTML='<div class="empty"><div class="ei">📋</div>Plan yok</div>';return;}
+  document.getElementById('plcont').innerHTML=list.map(function(p){
+    return '<div class="card" style="border-left:4px solid '+cols[p.plan_type]+'">'+
+      '<div style="display:flex;justify-content:space-between;margin-bottom:4px">'+
+      '<div><div style="font-weight:700;font-size:14px">'+p.title+'</div>'+
+      '<div style="font-size:11px;color:#94a3b8;margin-top:1px">'+(p.date||'')+'</div></div>'+
+      '<span data-id="'+p.id+'" onclick="delPlan(this.dataset.id)" style="cursor:pointer;color:#ef4444;font-size:16px">✕</span></div>'+
+      (p.content?'<div style="font-size:12px;color:#64748b;white-space:pre-wrap;margin-top:6px">'+p.content+'</div>':'')+
+      '</div>';
+  }).join('');
+}
+function openMod_plan(){
+  document.getElementById('m_pldate').value=new Date().toISOString().slice(0,10);
+  document.getElementById('m_pln').value='';document.getElementById('m_plbody').value='';
+  var l={daily:'Günlük Plan',monthly:'Aylık Plan',yearly:'Yıllık Plan'};
+  document.getElementById('m_plt').textContent=l[curPT]+' Ekle';
+  openMod('addPlan');
+}
+function doAddPlan(){
+  var title=document.getElementById('m_pln').value.trim();if(!title)return toast('Başlık girin',1);
+  req('POST','teacher_plans',null,withUser({plan_type:curPT,title:title,date:document.getElementById('m_pldate').value,content:document.getElementById('m_plbody').value.trim()})).then(function(r){
+    pln.unshift(r[0]);closeMod();rPlans();toast('Eklendi ✓');
+  }).catch(function(e){toast(e.message,1);});
+}
+function delPlan(id){
+  if(!confirm('Silinsin mi?'))return;
+  req('DELETE','teacher_plans','id=eq.'+id).then(function(){pln=pln.filter(function(p){return p.id!==id;});rPlans();}).catch(function(e){toast(e.message,1);});
+}
+
+// PROJECTS
+function rProj(){
+  var el=document.getElementById('ptabs');
+  el.innerHTML='<div class="tab'+(curPCls===null?' on':'')+'" onclick="selPC(null)">Tümü</div>'+
+    cls.map(function(c){return '<div class="tab'+(curPCls===c.id?' on':'')+'" data-id="'+c.id+'" onclick="selPC(this.dataset.id)">'+c.name+'</div>';}).join('');
+  rProjList();
+}
+function selPC(id){curPCls=id;rProj();}
+function setpf(f,btn){curPF=f;document.querySelectorAll('#pg-projects .ptb').forEach(function(t){t.classList.remove('on');});btn.classList.add('on');rProjList();}
+function rProjList(){
+  var today=new Date();today.setHours(0,0,0,0);
+  var list=prj;
+  if(curPCls)list=list.filter(function(p){return p.class_id===curPCls;});
+  if(curPF==='pending')list=list.filter(function(p){return !p.submitted&&new Date(p.deadline)>=today;});
+  if(curPF==='submitted')list=list.filter(function(p){return p.submitted;});
+  if(curPF==='late')list=list.filter(function(p){return !p.submitted&&new Date(p.deadline)<today;});
+  var sub=prj.filter(function(p){return p.submitted;}).length;
+  var late=prj.filter(function(p){return !p.submitted&&new Date(p.deadline)<today;}).length;
+  var pend=prj.length-sub-late;
+  var h='<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px">';
+  h+='<div class="card" style="padding:9px;text-align:center;border-top:3px solid #10b981"><div style="font-size:18px;font-weight:800;color:#10b981">'+sub+'</div><div style="font-size:9px;color:#94a3b8">TESLİM</div></div>';
+  h+='<div class="card" style="padding:9px;text-align:center;border-top:3px solid #f59e0b"><div style="font-size:18px;font-weight:800;color:#f59e0b">'+pend+'</div><div style="font-size:9px;color:#94a3b8">BEKLEYEN</div></div>';
+  h+='<div class="card" style="padding:9px;text-align:center;border-top:3px solid #ef4444"><div style="font-size:18px;font-weight:800;color:#ef4444">'+late+'</div><div style="font-size:9px;color:#94a3b8">GECİKEN</div></div></div>';
+  if(!list.length){h+='<div class="empty"><div class="ei">📂</div>Proje bulunamadı</div>';document.getElementById('pcont').innerHTML=h;return;}
+  list.sort(function(a,b){return new Date(a.deadline)-new Date(b.deadline);}).forEach(function(p){
+    var c=cls.find(function(x){return x.id===p.class_id;});
+    var s=stu.find(function(x){return x.id===p.student_id;});
+    var dl=new Date(p.deadline);dl.setHours(0,0,0,0);
+    var isL=!p.submitted&&dl<today;
+    var days=Math.ceil((dl-today)/(864e5));
+    var bdg,di,bc;
+    if(p.submitted){bdg='<span class="bdg bg">✅ Teslim</span>';di='<span style="font-size:10px;color:#94a3b8">'+p.submitted_at+'</span>';bc='#10b981';}
+    else if(isL){bdg='<span class="bdg br">❗ Gecikmiş</span>';di='<span style="font-size:10px;color:#ef4444;font-weight:700">'+Math.abs(days)+' gün geçti</span>';bc='#ef4444';}
+    else{bdg='<span class="bdg by">⏳ Bekliyor</span>';di=days===0?'<span style="font-size:10px;color:#f59e0b;font-weight:700">Bugün!</span>':'<span style="font-size:10px;color:#94a3b8">'+days+' gün kaldı</span>';bc='#f59e0b';}
+    h+='<div class="pc" style="border-left-color:'+bc+'">'+
+      '<div style="display:flex;justify-content:space-between;margin-bottom:6px">'+
+      '<div style="flex:1"><div style="font-weight:700;font-size:13px">'+p.topic+'</div>'+
+      '<div style="font-size:11px;color:#64748b;margin-top:1px">'+(c?c.name:'')+' · '+(s?s.name:'')+'</div></div>'+
+      '<div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">'+bdg+
+      '<span data-id="'+p.id+'" onclick="delProj(this.dataset.id)" style="cursor:pointer;color:#94a3b8;font-size:12px">✕</span></div></div>'+
+      '<div style="display:flex;justify-content:space-between;align-items:center;padding-top:7px;border-top:1px solid #f1f5f9">'+
+      '<div><span style="font-size:11px;color:#94a3b8">📅 '+p.deadline+'</span><span style="margin-left:7px">'+di+'</span></div>'+
+      (!p.submitted?'<button class="btn" style="background:#f0fdf4;color:#059669;padding:5px 10px;font-size:11px;font-weight:700" data-id="'+p.id+'" onclick="markS(this.dataset.id)">Teslim Aldım</button>':'')+
+      '</div>'+(p.notes?'<div style="margin-top:6px;font-size:11px;color:#64748b">'+p.notes+'</div>':'')+
+      '</div>';
+  });
+  document.getElementById('pcont').innerHTML=h;
+}
+function fillPS(cid){
+  var c=cls.find(function(x){return x.id===cid;});
+  var sel=document.getElementById('m_ps');
+  if(!c){sel.innerHTML='<option value="">Önce sınıf seçin</option>';return;}
+  sel.innerHTML='<option value="all">— Tüm Sınıf —</option>'+getStu(cid).map(function(s){return '<option value="'+s.id+'">'+s.name+'</option>';}).join('');
+}
+function doAddProj(){
+  var cid=document.getElementById('m_pc').value;
+  var sid=document.getElementById('m_ps').value;
+  var topic=document.getElementById('m_pt').value.trim();
+  var date=document.getElementById('m_pd').value;
+  var note=document.getElementById('m_pn').value.trim();
+  if(!cid||!sid||!topic||!date)return toast('Tüm alanları doldurun',1);
+  var rows=sid==='all'?getStu(cid).map(function(s){return {class_id:cid,student_id:s.id,topic:topic,deadline:date,submitted:false,notes:note};}):
+    [{class_id:cid,student_id:sid,topic:topic,deadline:date,submitted:false,notes:note}];
+  req('POST','teacher_projects',null,withUser(rows)).then(function(r){
+    prj=r.concat(prj);closeMod();rProjList();toast('Eklendi ✓');
+  }).catch(function(e){toast(e.message,1);});
+}
+function markS(id){
+  var at=new Date().toLocaleDateString('tr-TR');
+  req('PATCH','teacher_projects','id=eq.'+id,{submitted:true,submitted_at:at}).then(function(){
+    var p=prj.find(function(x){return x.id===id;});if(p){p.submitted=true;p.submitted_at=at;}rProjList();toast('Teslim alındı ✓');
+  }).catch(function(e){toast(e.message,1);});
+}
+function delProj(id){
+  if(!confirm('Silinsin mi?'))return;
+  req('DELETE','teacher_projects','id=eq.'+id).then(function(){prj=prj.filter(function(p){return p.id!==id;});rProjList();}).catch(function(e){toast(e.message,1);});
+}
+
+// VELI
+function rVeli(){
+  var el=document.getElementById('vtabs');
+  el.innerHTML=cls.map(function(c){return '<div class="tab'+(curCls===c.id?' on':'')+'" data-id="'+c.id+'" onclick="selVC(this.dataset.id)">'+c.name+'</div>';}).join('');
+  if(!curCls&&cls.length)curCls=cls[0].id;
+  rVCont();
+}
+function selVC(id){curCls=id;rVeli();}
+function rVCont(){
+  var c=cls.find(function(x){return x.id===curCls;});
+  if(!c){document.getElementById('vcont').innerHTML='<div class="empty"><div class="ei">🔗</div>Sınıf seçin</div>';return;}
+  document.getElementById('vcont').innerHTML=getStu(c.id).map(function(s){
+    return '<div class="vr">'+
+      '<div style="font-weight:600;font-size:13px">'+s.name+'</div>'+
+      '<div style="display:flex;gap:5px">'+
+      '<button class="btn btn-g" style="padding:5px 9px;font-size:11px" data-cid="'+c.id+'" data-sid="'+s.id+'" onclick="shareV(this.dataset.cid,this.dataset.sid)">🔗</button>'+
+      '<button class="btn btn-p" style="padding:5px 9px;font-size:11px" data-cid="'+c.id+'" data-sid="'+s.id+'" onclick="showV(this.dataset.cid,this.dataset.sid)">Göster</button>'+
+      '</div></div>';
+  }).join('');
+}
+function showV(cid,sid){
+  var s=stu.find(function(x){return x.id===sid;});if(!s)return;
+  document.getElementById('m_vn').textContent=s.name;
+  var h='';
+  [1,2].forEach(function(sem){
+    var g=getGrd(sid,sem);var a=calcAvg(g);
+    var bc=a!=='-'&&parseFloat(a)>=85?'#10b981':a!=='-'&&parseFloat(a)>=60?'#f59e0b':a!=='-'?'#ef4444':'#94a3b8';
+    var bg=a!=='-'&&parseFloat(a)>=85?'#f0fdf4':a!=='-'&&parseFloat(a)>=60?'#fffbeb':a!=='-'?'#fff0f0':'#f8faff';
+    h+='<div style="margin-bottom:12px"><div style="font-weight:700;color:#6366f1;margin-bottom:8px;font-size:13px">'+sem+'. Dönem</div>';
+    h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">';
+    [['Yazılı 1',g.w1],['Yazılı 2',g.w2],['Performans 1',g.perf],['Performans 2',g.project],['Proje',g.oral]].forEach(function(x){
+      var vc=x[1]?parseFloat(x[1])>=85?'#10b981':parseFloat(x[1])>=60?'#f59e0b':'#ef4444':'#94a3b8';
+      h+='<div style="background:#f8faff;border-radius:8px;padding:9px;border:1px solid #e2e8ff">'+
+        '<div style="font-size:10px;color:#94a3b8">'+x[0]+'</div>'+
+        '<div style="font-size:18px;font-weight:800;color:'+vc+'">'+(x[1]||'–')+'</div></div>';
+    });
+    h+='</div><div style="margin-top:8px;background:'+bg+';border-radius:8px;padding:10px;display:flex;justify-content:space-between;align-items:center;border:1.5px solid '+bc+'">'+
+      '<span style="font-weight:700;color:#64748b;font-size:12px">Dönem Ortalaması</span>'+
+      '<span style="font-size:20px;font-weight:800;color:'+bc+'">'+a+'</span></div></div>';
+  });
+  document.getElementById('m_vb').innerHTML=h;
+  openMod('veli');
+}
+function shareV(cid,sid){
+  var s=stu.find(function(x){return x.id===sid;});
+  var c=cls.find(function(x){return x.id===cid;});
+  var d=btoa(encodeURIComponent(JSON.stringify({name:s.name,cls:c?c.name:'',g1:getGrd(sid,1),g2:getGrd(sid,2)})));
+  var url=location.origin+location.pathname+'?veli='+d;
+  if(navigator.share)navigator.share({title:s.name,url:url});
+  else navigator.clipboard.writeText(url).then(function(){toast('Link kopyalandı ✓');});
+}
+
+// VELI VIEW MODE
+function checkVeli(){
+  var p=new URLSearchParams(location.search).get('veli');
+  if(!p)return false;
+  try{
+    var d=JSON.parse(decodeURIComponent(atob(p)));
+    var h='<div style="min-height:100vh;background:#f0f4ff;font-family:-apple-system,sans-serif;padding:16px;max-width:480px;margin:0 auto">';
+    h+='<div style="background:linear-gradient(135deg,#4338ca,#6366f1);border-radius:14px;padding:16px;color:#fff;text-align:center;margin-bottom:14px">';
+    h+='<div style="font-size:10px;opacity:.7;letter-spacing:2px">KİMYA · '+(d.cls||'')+'</div>';
+    h+='<div style="font-size:22px;font-weight:700;margin:4px 0">'+d.name+'</div></div>';
+    [1,2].forEach(function(sem){
+      var g=d['g'+sem]||{};var a=calcAvg(g);
+      var bc=a!=='-'&&parseFloat(a)>=85?'#10b981':a!=='-'&&parseFloat(a)>=60?'#f59e0b':a!=='-'?'#ef4444':'#94a3b8';
+      h+='<div style="background:#fff;border-radius:12px;padding:14px;margin-bottom:10px;border:1px solid #e2e8ff">';
+      h+='<div style="font-weight:700;color:#6366f1;margin-bottom:10px">'+sem+'. Dönem</div>';
+      h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">';
+      [['Yazılı 1',g.w1],['Yazılı 2',g.w2],['Performans 1',g.perf],['Performans 2',g.project],['Proje',g.oral]].forEach(function(x){
+        var vc=x[1]?parseFloat(x[1])>=85?'#10b981':parseFloat(x[1])>=60?'#f59e0b':'#ef4444':'#94a3b8';
+        h+='<div style="background:#f8faff;border-radius:8px;padding:9px"><div style="font-size:10px;color:#94a3b8">'+x[0]+'</div><div style="font-size:18px;font-weight:800;color:'+vc+'">'+(x[1]||'–')+'</div></div>';
+      });
+      h+='</div><div style="margin-top:8px;border-radius:8px;padding:10px;display:flex;justify-content:space-between;background:'+
+        (a!=='-'&&parseFloat(a)>=85?'#f0fdf4':a!=='-'&&parseFloat(a)>=60?'#fffbeb':'#fff0f0')+';border:1.5px solid '+bc+'">';
+      h+='<span style="font-weight:700;color:#64748b;font-size:12px">Ortalama</span>';
+      h+='<span style="font-size:20px;font-weight:800;color:'+bc+'">'+a+'</span></div></div>';
+    });
+    h+='</div>';
+    document.body.innerHTML=h;
+    return true;
+  }catch(e){return false;}
+}
+
+// FAB for plans
+document.querySelector('.fab').addEventListener('click',function(){openMod_plan();});
+
+if(!checkVeli()){
+  ensureLogin();
+}
+</script>
+</body>
+</html>
