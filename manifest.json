@@ -1,0 +1,10 @@
+{
+  "name": "Öğretmenim",
+  "short_name": "Öğretmenim",
+  "description": "Kimya öğretmeni yönetim uygulaması",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a1628",
+  "theme_color": "#0a1628",
+  "orientation": "portrait"
+}
